@@ -1,2 +1,2 @@
 # Grades_Overview
-Something to keep track of my academic scores
+Something to help me keep track of my academic scores.
