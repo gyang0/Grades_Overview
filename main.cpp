@@ -8,12 +8,7 @@ int main()
     // File
     fstream file;
     
-    file.open("grades.txt");
-    if(file.fail())
-    {
-        cout << "Failed to open file.";
-        exit(1);
-    }
+    
     
     
     int choice = 0;
@@ -31,11 +26,43 @@ int main()
         cin >> choice;
     }
     
+    string courseID, courseName;
+    int gradeAverage, gradeTaken;
+    
+    
+    
+    
+    file.open("grades.txt");
+    if(file.fail())
+    {
+        cout << "Failed to open file.";
+        exit(1);
+    }
+    
     
     switch(choice)
     {
         case 1:
             // Add a course
+            cout << "Enter the course ID: ";
+            cin >> courseID;
+            
+            cin.ignore();
+            cout << "Enter the course name: ";
+            getline(cin, courseName);
+            
+            cout << "Enter your grade average: ";
+            cin >> gradeAverage;
+            
+            cout << "Enter your grade when you took this course: ";
+            cin >> gradeTaken;
+            
+            
+            cout << "\nAdded " << courseName << " (" << courseID << ") with a GPA of "
+                 << gradeAverage << " to grade " << gradeTaken;
+            
+            file << gradeTaken << " " << courseID << " " << gradeAverage << " " << courseName << "\n";
+            
         break;
         
         case 2:
@@ -46,6 +73,8 @@ int main()
             // See overview
         break;
     }
+    
+    file.close();
     
     
     return 0;
