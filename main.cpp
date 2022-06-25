@@ -10,13 +10,14 @@ int main()
     
     char again = 'Y';
     
+    // Check if file opens
     file.open("grades.txt");
-        if(file.fail())
-        {
-            cout << "Failed to open file.";
-            exit(1);
-        }
-    
+    if(file.fail())
+    {
+        cout << "Failed to open file.";
+        exit(1);
+    }
+    file.close();
     
     
     do
@@ -44,6 +45,8 @@ int main()
         switch(choice)
         {
             case 1:
+                file.open("grades.txt");
+                
                 // Add a course
                 cout << "Enter the course ID: ";
                 cin >> courseID;
@@ -75,6 +78,9 @@ int main()
                 // Write to file
                 file << gradeTaken << " " << gradeAverage << "                 [" << courseID << "] " << courseName << "\n";
                 
+                
+                file.close();
+                
             break;
             
             case 2:
@@ -84,22 +90,48 @@ int main()
             break;
             
             case 3:
+                int grade = 0;
+                int count = 0;
+                int word;
+                
+                
                 for(int i = 7; i <= 12; i++)
                 {
+                    // Open file
+                    file.open("grades.txt");
+                    
                     cout << i << "th grade\n";
                     cout << "Grade               Course\n";
                     
+                    
                     while(getline(file, line))
                     {
-                        for(int j = 2; j < line.length(); j++)
-                            cout << line[j];
+                        if(line[1] == ' ')
+                            grade = ((int)line[0] - 48);
+                        else
+                            grade = ((int)line[0] - 48) * 10 + ((int)line[1] - 48);
                         
-                        cout << "\n";
+                        
+                        if(grade == i)
+                        {
+                            cout << "  ";
+                            for(int j = 2; j < line.length(); j++)
+                                cout << line[j];
+                        
+                            cout << "\n";
+                        }
+                        
                     }
                     
+                    
+                    
+                    
+                    
                     cout << "\n";
+                    
+                    // Close file
+                    file.close();
                 }
-                
                 
             break;
         }
@@ -110,9 +142,6 @@ int main()
         
         
     } while(again == 'Y' || again == 'y');
-    
-    
-    file.close();
     
     
     return 0;
