@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include "funcs.h"
 using namespace std;
 
 int main()
@@ -37,50 +38,13 @@ int main()
             cin >> choice;
         }
         
-        string courseID, courseName,
-               line;
-        int gradeAverage, gradeTaken;
         
+        string line;
         
         switch(choice)
         {
             case 1:
-                file.open("grades.txt");
-                
-                // Add a course
-                cout << "Enter the course ID: ";
-                cin >> courseID;
-                
-                cin.ignore();
-                cout << "Enter the course name: ";
-                getline(cin, courseName);
-                
-                cout << "Enter your grade average: ";
-                cin >> gradeAverage;
-                while(gradeAverage < 0 || gradeAverage > 100)
-                {
-                    cout << "Again: ";
-                    cin >> gradeAverage;
-                }
-                
-                cout << "Enter your grade when you took this course: ";
-                cin >> gradeTaken;
-                while(gradeTaken < 7 || gradeTaken > 12)
-                {
-                    cout << "Again: ";
-                    cin >> gradeTaken;
-                }
-                
-                // Echo back
-                cout << "\nAdded " << courseName << " (" << courseID << ") with a GPA of "
-                     << gradeAverage << " to grade " << gradeTaken;
-                
-                // Write to file
-                file << gradeTaken << " " << gradeAverage << "                 [" << courseID << "] " << courseName << "\n";
-                
-                
-                file.close();
-                
+                addCourse();
             break;
             
             case 2:
@@ -122,9 +86,6 @@ int main()
                         }
                         
                     }
-                    
-                    
-                    
                     
                     
                     cout << "\n";
