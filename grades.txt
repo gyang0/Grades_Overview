@@ -1,5 +1,4 @@
-7 93                 [OC005] Honors Chemistry
-8 96                 [JE002] Fundamentals of Literary Analysis
-12 99                 [OM013] Honors Precalculus
-8 100                 [OCS10] Programming in C++
-
+8 [OCS10] Programming in C++                 99
+12 [OC005] Honors Chemistry                 93
+7 [OM013] Honors Precalculus                 100
+8 [JE002] Fundamentals of Literary Analysis                 96
