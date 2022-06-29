@@ -2,6 +2,24 @@
 #include <fstream>
 #include "funcs.h"
 
+
+std::string numberToLetter(int grade)
+{
+    if(grade >= 93) return "A";
+    else if(grade >= 90) return "A-";
+    else if(grade >= 87) return "B+";
+    else if(grade >= 83) return "B";
+    else if(grade >= 80) return "B-";
+    else if(grade >= 77) return "C+";
+    else if(grade >= 73) return "C";
+    else if(grade >= 70) return "C-";
+    else if(grade >= 67) return "D+";
+    else if(grade >= 63) return "D";
+    else if(grade >= 60) return "D-";
+    else return "F";
+}
+
+
 void addCourse()
 {
     // Appending to file
@@ -44,10 +62,9 @@ void addCourse()
     std::string spaces;
     
     // Write to file
-    outputFile << gradeTaken << spaces.assign(' ', 30)
-               << " [" << courseID << "] "
-               << courseName
-               << gradeAverage << "\n";
+    outputFile << gradeTaken << " "
+               << " [" << courseID << "] " << courseName << "                             "
+               << numberToLetter(gradeAverage) << " (" << gradeAverage << ")\n";
     
     
     outputFile.close();
@@ -105,18 +122,18 @@ void showOverview()
                 numCourses++;
                 
                 // One digit
-                if(line[line.length() - 2] == ' ')
-                    sumGrades += (line[line.length() - 1] - 48) * 10;
+                if(line[line.length() - 3] == '(')
+                    sumGrades += (line[line.length() - 2] - 48) * 10;
                 
                 // Two digits
-                else if(line[line.length() - 3] == ' ')
-                    sumGrades += ((line[line.length() - 2] - 48) * 10
-                                  + (line[line.length() - 1] - 48));
+                else if(line[line.length() - 4] == '(')
+                    sumGrades += ((line[line.length() - 3] - 48) * 10
+                                  + (line[line.length() - 2] - 48));
                 // Three digits
                 else
-                    sumGrades += ((line[line.length() - 3] - 48) * 100
-                                  + (line[line.length() - 2] - 48) * 10
-                                  + (line[line.length() - 1] - 48));
+                    sumGrades += ((line[line.length() - 4] - 48) * 100
+                                  + (line[line.length() - 3] - 48) * 10
+                                  + (line[line.length() - 2] - 48));
                 
                 
                 std::cout << "  ";
@@ -129,7 +146,7 @@ void showOverview()
         }
         
         if(numCourses > 0)
-            std::cout << "Average grade: " << (sumGrades/numCourses) << "\n";
+            std::cout << "Average grade: " << numberToLetter(sumGrades/numCourses) << " (" << (sumGrades/numCourses) << ")\n";
         else
             std::cout << "No data\n";
         
