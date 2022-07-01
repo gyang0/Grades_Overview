@@ -28,7 +28,8 @@ void addCourse()
     
     // Variables
     std::string courseID, courseName;
-    int gradeAverage, gradeTaken;
+    double gradeAverage;
+    int gradeTaken;
     
     
     // Add a course
@@ -104,7 +105,7 @@ void showOverview()
         file.open("grades.txt", std::ios::in);
         
         std::cout << i << "th grade\n";
-        std::cout << "  Course                        Grade\n";
+        std::cout << "  Course                                                Grade\n";
         
         
         
@@ -121,19 +122,32 @@ void showOverview()
             {
                 numCourses++;
                 
+                // Gets the sum of grades for calculating the average.
+                // Note: line[line.length() - 1] is a whitespace character.
+                
                 // One digit
-                if(line[line.length() - 3] == '(')
-                    sumGrades += (line[line.length() - 2] - 48) * 10;
+                if(line[line.length() - 4] == '(')
+                {
+                    sumGrades += ((int)line[line.length() - 3] - 48);
+                }
+                
                 
                 // Two digits
-                else if(line[line.length() - 4] == '(')
-                    sumGrades += ((line[line.length() - 3] - 48) * 10
-                                  + (line[line.length() - 2] - 48));
+                else if(line[line.length() - 5] == '(')
+                {
+                    sumGrades += (((int)line[line.length() - 4] - 48) * 10
+                               + ((int)line[line.length() - 3] - 48));
+                }
+                    
+                
                 // Three digits
                 else
-                    sumGrades += ((line[line.length() - 4] - 48) * 100
-                                  + (line[line.length() - 3] - 48) * 10
-                                  + (line[line.length() - 2] - 48));
+                {
+                    sumGrades += (((int)line[line.length() - 5] - 48) * 100
+                               + ((int)line[line.length() - 4] - 48) * 10
+                               + ((int)line[line.length() - 3] - 48));
+                }
+                
                 
                 
                 std::cout << "  ";
@@ -146,11 +160,11 @@ void showOverview()
         }
         
         if(numCourses > 0)
-            std::cout << "Average grade: " << numberToLetter(sumGrades/numCourses) << " (" << (sumGrades/numCourses) << ")\n";
+            std::cout << "\nAverage grade: " << numberToLetter(sumGrades/numCourses) << " (" << (sumGrades/numCourses) << ")\n";
         else
-            std::cout << "No data\n";
+            std::cout << "\nNo data\n";
         
-        std::cout << "\n";
+        std::cout << "\n\n\n";
         
         // Close file
         file.close();
