@@ -64,7 +64,7 @@ void addCourse()
     
     // Write to file
     outputFile << gradeTaken << " "
-               << " [" << courseID << "] " << courseName << "                             "
+               << "[" << courseID << "] " << courseName << "                             "
                << numberToLetter(gradeAverage) << " (" << gradeAverage << ")\n";
     
     
@@ -72,11 +72,44 @@ void addCourse()
 }
 
 
+/*
+    Based on
+        https://www.daniweb.com/programming/software-development/code/216996/delete-a-line-from-a-text-file
+*/
 void deleteCourse()
 {
+    std::ifstream file ("grades.txt");
+    std::ofstream tempFile ("temp.txt", std::ios::app);
     
+    std::string line,
+           toDelete,
+           courseID;
     
+    std::cout << "Enter the course ID (5 characters): ";
+    std::cin >> courseID;
+    
+    while(getline(file, line))
+    {
+        // Grade is two digits
+        if(isdigit(line[1]))
+            courseID = line[4] + line[5] + line[6] + line[7] + line[8];
+        
+        // Grade is one digit
+        else
+            courseID = line[3] + line[4] + line[5] + line[6] + line[7];
+        
+        
+        if(courseID != toDelete)
+            tempFile << line << "\n";
+    }
+    
+    file.close();
+    tempFile.close();
+    
+    remove("grades.txt");
+    rename("temp.txt", "grades.txt");
 }
+
 
 void showOverview()
 {
@@ -126,26 +159,28 @@ void showOverview()
                 // Note: line[line.length() - 1] is a whitespace character.
                 
                 // One digit
-                if(line[line.length() - 4] == '(')
+                if(line[line.length() - 3] == '(')
                 {
-                    sumGrades += ((int)line[line.length() - 3] - 48);
+                    sumGrades += ((int)line[line.length() - 2] - 48);
+                    
                 }
                 
                 
                 // Two digits
-                else if(line[line.length() - 5] == '(')
+                else if(line[line.length() - 4] == '(')
                 {
-                    sumGrades += (((int)line[line.length() - 4] - 48) * 10
-                               + ((int)line[line.length() - 3] - 48));
-                }
+                    sumGrades += ((((int)line[line.length() - 3] - 48) * 10
+                               + ((int)line[line.length() - 2] - 48)));
                     
+                }
+                
                 
                 // Three digits
                 else
                 {
-                    sumGrades += (((int)line[line.length() - 5] - 48) * 100
-                               + ((int)line[line.length() - 4] - 48) * 10
-                               + ((int)line[line.length() - 3] - 48));
+                    sumGrades += ((((int)line[line.length() - 4] - 48) * 100
+                               + ((int)line[line.length() - 3] - 48) * 10
+                               + ((int)line[line.length() - 2] - 48)));
                 }
                 
                 
@@ -158,6 +193,7 @@ void showOverview()
             }
             
         }
+        
         
         if(numCourses > 0)
             std::cout << "\nAverage grade: " << numberToLetter(sumGrades/numCourses) << " (" << (sumGrades/numCourses) << ")\n";
