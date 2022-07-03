@@ -48,9 +48,7 @@ int main()
             break;
             
             case 2:
-                // Delete a course
-                
-                
+                deleteCourse();
             break;
             
             case 3:
