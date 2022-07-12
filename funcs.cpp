@@ -158,30 +158,25 @@ void showOverview()
                 // Gets the sum of grades for calculating the average.
                 // Note: line[line.length() - 1] is a whitespace character.
                 
-                // One digit
-                if(line[line.length() - 3] == '(')
-                {
-                    sumGrades += ((int)line[line.length() - 2] - 48);
+                
+                // Three digits
+                if(isdigit(line[line.length() - 5]))
+                    sumGrades += ((((int)line[line.length() - 5] - 48) * 100
+                               + ((int)line[line.length() - 4] - 48) * 10
+                               + ((int)line[line.length() - 3] - 48)));
                     
-                }
                 
                 
                 // Two digits
-                else if(line[line.length() - 4] == '(')
-                {
-                    sumGrades += ((((int)line[line.length() - 3] - 48) * 10
-                               + ((int)line[line.length() - 2] - 48)));
+                else if(isdigit(line[line.length() - 4]))
+                    sumGrades += ((int)line[line.length() - 4] - 48) * 10
+                               + ((int)line[line.length() - 3] - 48);
                     
-                }
                 
                 
-                // Three digits
+                // One digit
                 else
-                {
-                    sumGrades += ((((int)line[line.length() - 4] - 48) * 100
-                               + ((int)line[line.length() - 3] - 48) * 10
-                               + ((int)line[line.length() - 2] - 48)));
-                }
+                    sumGrades += (int)line[line.length() - 3] - 48;
                 
                 
                 
