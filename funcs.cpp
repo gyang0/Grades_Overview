@@ -79,11 +79,11 @@ void addCourse()
 void deleteCourse()
 {
     std::ifstream file ("grades.txt");
-    std::ofstream tempFile ("temp.txt", std::ios::app);
+    std::ofstream tempFile ("temp.txt");
     
     std::string line,
-           toDelete,
-           courseID;
+                toDelete,
+                courseID;
     
     std::cout << "Enter the course ID (5 characters): ";
     std::cin >> courseID;
@@ -100,7 +100,7 @@ void deleteCourse()
         
         
         if(courseID != toDelete)
-            tempFile << line << "\n";
+            tempFile << line;
     }
     
     file.close();
