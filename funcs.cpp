@@ -86,7 +86,7 @@ void deleteCourse()
                 courseID;
     
     std::cout << "Enter the course ID (5 characters): ";
-    std::cin >> courseID;
+    std::cin >> toDelete;
     
     while(getline(file, line))
     {
@@ -98,8 +98,9 @@ void deleteCourse()
         else
             courseID = line[3] + line[4] + line[5] + line[6] + line[7];
         
+        std::cout << courseID << "\n";
         
-        if(courseID != toDelete)
+        if(toDelete != courseID)
             tempFile << line;
     }
     
