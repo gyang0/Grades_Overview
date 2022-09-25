@@ -23,6 +23,7 @@ int main()
     file.close();
     
     
+    
     do
     {
         int choice = 0;
@@ -63,6 +64,7 @@ int main()
         
         
     } while(again == 'Y' || again == 'y');
+    
     
     
     return 0;
