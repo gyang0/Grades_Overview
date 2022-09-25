@@ -64,8 +64,12 @@ void addCourse()
     
     // Write to file
     outputFile << gradeTaken << " "
-               << "[" << courseID << "] " << courseName << "                             "
-               << numberToLetter(gradeAverage) << " (" << gradeAverage << ")\n";
+               << "[" << courseID << "] " << courseName;
+    
+    int numSpaces = 75 - (courseID.length() + courseName.length() + (gradeTaken > 9 ? 2 : 1) + 4);
+    outputFile << spaces.assign(numSpaces, ' ');
+    
+    outputFile << numberToLetter(gradeAverage) << " (" << gradeAverage << ")\n";
     
     
     outputFile.close();
@@ -92,16 +96,16 @@ void deleteCourse()
     {
         // Grade is two digits
         if(isdigit(line[1]))
-            courseID = line[4] + line[5] + line[6] + line[7] + line[8];
+            courseID = line.substr(4, 5);
         
         // Grade is one digit
         else
-            courseID = line[3] + line[4] + line[5] + line[6] + line[7];
+            courseID = line.substr(3, 5);
         
         std::cout << courseID << "\n";
         
         if(toDelete != courseID)
-            tempFile << line;
+            tempFile << line << "\n";
     }
     
     file.close();
@@ -138,8 +142,11 @@ void showOverview()
         // Open file
         file.open("grades.txt", std::ios::in);
         
+        std::string spaces = "";
+        spaces.assign(67, ' ');
+        
         std::cout << i << "th grade\n";
-        std::cout << "  Course                                                Grade\n";
+        std::cout << "  Course" << spaces << "Grade\n";
         
         
         
@@ -162,22 +169,23 @@ void showOverview()
                 
                 // Three digits
                 if(isdigit(line[line.length() - 5]))
-                    sumGrades += ((((int)line[line.length() - 5] - 48) * 100
-                               + ((int)line[line.length() - 4] - 48) * 10
-                               + ((int)line[line.length() - 3] - 48)));
-                    
-                
+                {
+                    sumGrades += ((((int)line[line.length() - 5] - (int)('0')) * 100
+                               + ((int)line[line.length() - 4] - (int)('0')) * 10
+                               + ((int)line[line.length() - 3] - (int)('0'))));
+                }
                 
                 // Two digits
                 else if(isdigit(line[line.length() - 4]))
-                    sumGrades += ((int)line[line.length() - 4] - 48) * 10
-                               + ((int)line[line.length() - 3] - 48);
-                    
+                {
+                    sumGrades += ((int)line[line.length() - 4] - (int)('0')) * 10
+                               + ((int)line[line.length() - 3] - (int)('0'));
+                }
                 
                 
                 // One digit
                 else
-                    sumGrades += (int)line[line.length() - 3] - 48;
+                    sumGrades += (int)line[line.length() - 3] - (int)('0');
                 
                 
                 
