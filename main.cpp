@@ -1,9 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <iomanip>
+#include <stdlib.h>
 #include "funcs.h"
 using namespace std;
+
+
+
+
 
 int main()
 {
@@ -23,7 +27,7 @@ int main()
     file.close();
     
     
-    
+    // Main loop
     do
     {
         int choice = 0;
@@ -54,14 +58,12 @@ int main()
             
             case 3:
                 showOverview();
-                
             break;
         }
         
         
-        cout << "\nAgain? (Y/N)\n";
+        cout << "\nBack to menu? (Y/N)\n";
         cin >> again;
-        
         
     } while(again == 'Y' || again == 'y');
     
