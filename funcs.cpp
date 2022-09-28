@@ -35,6 +35,11 @@ void addCourse()
     // Add a course
     std::cout << "Enter the course ID: ";
     std::cin >> courseID;
+    while(courseID.length() != 5)
+    {
+        std::cout << "Course ID must be 5 characters: ";
+        std::cin >> courseID;
+    }
     
     std::cin.ignore();
     std::cout << "Enter the course name: ";
@@ -44,7 +49,7 @@ void addCourse()
     std::cin >> gradeAverage;
     while(gradeAverage < 0 || gradeAverage > 100)
     {
-        std::cout << "Again: ";
+        std::cout << "Grade average must be between 0 and 100: ";
         std::cin >> gradeAverage;
     }
     
@@ -52,9 +57,10 @@ void addCourse()
     std::cin >> gradeTaken;
     while(gradeTaken < 7 || gradeTaken > 12)
     {
-        std::cout << "Again: ";
+        std::cout << "Grade must be between 7 and 12: ";
         std::cin >> gradeTaken;
     }
+    
     
     // Echo back
     std::cout << "\nAdded course to file.";
@@ -70,7 +76,6 @@ void addCourse()
     outputFile << spaces.assign(numSpaces, ' ');
     
     outputFile << numberToLetter(gradeAverage) << " (" << gradeAverage << ")\n";
-    
     
     outputFile.close();
 }
@@ -149,7 +154,7 @@ void showOverview()
         std::cout << "  Course" << spaces << "Grade\n";
         
         
-        
+        // Read file
         while(getline(file, line))
         {
             // The grade level
@@ -166,26 +171,23 @@ void showOverview()
                 // Gets the sum of grades for calculating the average.
                 // Note: line[line.length() - 1] is a whitespace character.
                 
-                
-                // Three digits
-                if(isdigit(line[line.length() - 5]))
+                if(isspace(line[line.length() - 1]))
                 {
-                    sumGrades += ((((int)line[line.length() - 5] - (int)('0')) * 100
-                               + ((int)line[line.length() - 4] - (int)('0')) * 10
-                               + ((int)line[line.length() - 3] - (int)('0'))));
+                    // Three digits
+                    if(isdigit(line[line.length() - 5]))
+                        sumGrades += ((((int)line[line.length() - 5] - (int)('0')) * 100
+                                   + ((int)line[line.length() - 4] - (int)('0')) * 10
+                                   + ((int)line[line.length() - 3] - (int)('0'))));
+                    
+                    // Two digits
+                    else if(isdigit(line[line.length() - 4]))
+                        sumGrades += ((int)line[line.length() - 4] - (int)('0')) * 10
+                                   + ((int)line[line.length() - 3] - (int)('0'));
+                    
+                    // One digit
+                    else
+                        sumGrades += (int)line[line.length() - 3] - (int)('0');
                 }
-                
-                // Two digits
-                else if(isdigit(line[line.length() - 4]))
-                {
-                    sumGrades += ((int)line[line.length() - 4] - (int)('0')) * 10
-                               + ((int)line[line.length() - 3] - (int)('0'));
-                }
-                
-                
-                // One digit
-                else
-                    sumGrades += (int)line[line.length() - 3] - (int)('0');
                 
                 
                 
@@ -199,6 +201,7 @@ void showOverview()
         }
         
         
+        // Display average grade
         if(numCourses > 0)
             std::cout << "\nAverage grade: " << numberToLetter(sumGrades/numCourses) << " (" << (sumGrades/numCourses) << ")\n";
         else
