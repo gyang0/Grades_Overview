@@ -26,6 +26,7 @@ void addCourse()
     std::ofstream outputFile;
     outputFile.open("grades.txt", std::ios::app);
     
+    
     // Variables
     std::string courseID, courseName;
     double gradeAverage;
@@ -77,6 +78,7 @@ void addCourse()
     
     outputFile << numberToLetter(gradeAverage) << " (" << gradeAverage << ")\n";
     
+    
     outputFile.close();
 }
 
@@ -88,7 +90,7 @@ void addCourse()
 void deleteCourse()
 {
     std::ifstream file ("grades.txt");
-    std::ofstream tempFile ("temp.txt");
+    std::ofstream tempFile ("temp.txt", std::ios::app);
     
     std::string line,
                 toDelete,
@@ -96,6 +98,12 @@ void deleteCourse()
     
     std::cout << "Enter the course ID (5 characters): ";
     std::cin >> toDelete;
+    while(toDelete.length() != 5)
+    {
+        std::cout << "Course ID must be 5 characters: ";
+        std::cin >> toDelete;
+    }
+    
     
     while(getline(file, line))
     {
