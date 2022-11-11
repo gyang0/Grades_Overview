@@ -80,6 +80,10 @@ void addCourse()
     
     
     outputFile.close();
+    
+    
+    // Avoid weird happenings with overview directly after adding/deleting a course.
+    exit(0);
 }
 
 
@@ -115,8 +119,6 @@ void deleteCourse()
         else
             courseID = line.substr(3, 5);
         
-        std::cout << courseID << "\n";
-        
         if(toDelete != courseID)
             tempFile << line << "\n";
     }
@@ -126,6 +128,9 @@ void deleteCourse()
     
     remove("grades.txt");
     rename("temp.txt", "grades.txt");
+    
+    // Avoid weird happenings with overview directly after adding/deleting a course.
+    exit(0);
 }
 
 
@@ -183,18 +188,18 @@ void showOverview()
                 {
                     // Three digits
                     if(isdigit(line[line.length() - 5]))
-                        sumGrades += ((((int)line[line.length() - 5] - (int)('0')) * 100
-                                   + ((int)line[line.length() - 4] - (int)('0')) * 10
-                                   + ((int)line[line.length() - 3] - (int)('0'))));
+                        sumGrades += (int)(line[line.length() - 5] - '0') * 100
+                                   + (int)(line[line.length() - 4] - '0') * 10
+                                   + (int)(line[line.length() - 3] - '0');
                     
                     // Two digits
                     else if(isdigit(line[line.length() - 4]))
-                        sumGrades += ((int)line[line.length() - 4] - (int)('0')) * 10
-                                   + ((int)line[line.length() - 3] - (int)('0'));
+                        sumGrades += (int)(line[line.length() - 4] - '0') * 10
+                                   + (int)(line[line.length() - 3] - '0');
                     
                     // One digit
                     else
-                        sumGrades += (int)line[line.length() - 3] - (int)('0');
+                        sumGrades += (int)(line[line.length() - 3] - ('0'));
                 }
                 
                 
