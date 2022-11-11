@@ -6,12 +6,8 @@
 using namespace std;
 
 
-
-
-
 int main()
 {
-    
     // File
     fstream file;
     
