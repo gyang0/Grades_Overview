@@ -1,10 +1,53 @@
 #include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
 #include <fstream>
+#include "course.h"
 #include "funcs.h"
 
+// How many lines of data there is in grades.txt per course
+#define LINES_PER_COURSE 4
 
-std::string numberToLetter(int grade)
-{
+// Courses taken
+std::vector<Course> courseload;
+
+
+void updateCourseload(){
+    courseload = {};
+
+    std::ifstream file("grades.txt");
+    std::string line;
+
+    int index = 0;
+    Course toAdd(0, "00000", "TITLE", 0);
+
+    while(getline(file, line)){
+        // do something with the lines
+        if(index == 0) toAdd.setGradeTaken(std::stoi(line));
+        else if(index == 1) toAdd.setCourseCode(line);
+        else if(index == 2) toAdd.setCourseName(line);
+        else if(index == 3) toAdd.setScore(std::stoi(line));
+
+        // Loop for every 4 lines of the file
+        index++;
+        
+        if(index >= LINES_PER_COURSE){
+            courseload.push_back(toAdd);
+            index = 0;
+        }
+    }
+
+    file.close();
+}
+
+/**
+ * Converts a numeric grade to its letter grade.
+ * 
+ * @param grade - The numeric grade
+ * @return - The letter grade from F to A
+ */
+std::string numberToLetter(int grade){
     if(grade >= 93) return "A";
     else if(grade >= 90) return "A-";
     else if(grade >= 87) return "B+";
@@ -19,212 +62,136 @@ std::string numberToLetter(int grade)
     else return "F";
 }
 
+void addCourse(){
+    int anotherCourse = 0;
+    do {
+        std::cout << "---Add Courses---------------\n";
 
-void addCourse()
-{
-    // Appending to file
-    std::ofstream outputFile;
-    outputFile.open("grades.txt", std::ios::app);
-    
-    
-    // Variables
-    std::string courseID, courseName;
-    double gradeAverage;
-    int gradeTaken;
-    
-    
-    // Add a course
-    std::cout << "Enter the course ID: ";
-    std::cin >> courseID;
-    while(courseID.length() != 5)
-    {
-        std::cout << "Course ID must be 5 characters: ";
-        std::cin >> courseID;
-    }
-    
-    std::cin.ignore();
-    std::cout << "Enter the course name: ";
-    getline(std::cin, courseName);
-    
-    std::cout << "Enter your grade average: ";
-    std::cin >> gradeAverage;
-    while(gradeAverage < 0 || gradeAverage > 100)
-    {
-        std::cout << "Grade average must be between 0 and 100: ";
-        std::cin >> gradeAverage;
-    }
-    
-    std::cout << "Enter your grade when you took this course: ";
-    std::cin >> gradeTaken;
-    while(gradeTaken < 7 || gradeTaken > 12)
-    {
-        std::cout << "Grade must be between 7 and 12: ";
-        std::cin >> gradeTaken;
-    }
-    
-    
-    // Echo back
-    std::cout << "\nAdded course to file.";
-    
-    
-    std::string spaces;
-    
-    // Write to file
-    outputFile << gradeTaken << " "
-               << "[" << courseID << "] " << courseName;
-    
-    int numSpaces = 75 - (courseID.length() + courseName.length() + (gradeTaken > 9 ? 2 : 1) + 4);
-    outputFile << spaces.assign(numSpaces, ' ');
-    
-    outputFile << numberToLetter(gradeAverage) << " (" << gradeAverage << ")\n";
-    
-    
-    outputFile.close();
-    
-    
-    // Avoid weird happenings with overview directly after adding/deleting a course.
-    exit(0);
+        
+        int gradeTaken;
+        std::string courseCode;
+        std::string courseName;
+        double score;
+
+
+        int choice = 0;
+
+        do {
+            // Inputs
+            std::cout << "Grade when you took the course: ";
+            std::cin >> gradeTaken;
+
+            std::cout << "Course code: ";
+            std::cin >> courseCode;
+
+            std::cout << "Course name: ";
+            std::cin.ignore();
+            std::getline(std::cin, courseName);
+
+            std::cout << "Numeric score you received in this course: ";
+            std::cin >> score;
+
+            std::cout << "\nA course will be added with the following information:\n";
+            std::cout << "   Grade taken: " << gradeTaken << "\n";
+            std::cout << "   Course code: " << courseCode << "\n";
+            std::cout << "   Course name: " << courseName << "\n";
+            std::cout << "   Numeric score received: " << score << "\n\n";
+            std::cout << "Enter 0 to proceed, 1 to edit this information, and 2 to quit: ";
+
+            std::cin >> choice;
+            std::cout << "\n";
+
+        } while(choice == 1 || choice == 1);
+
+
+        // Choice 0: proceed
+        if(choice == 0){
+            // Add data to file
+            std::ofstream file("grades.txt", std::ios_base::app);
+            file << gradeTaken << "\n";
+            file << courseCode << "\n";
+            file << courseName << "\n";
+            file << score << "\n";
+            file.close();
+
+            std::cout << "The course has been added. Would you like to add another course?\n";
+            std::cout << "Enter 0 to add another course, 1 to return to menu, and 2 to quit: ";
+            std::cin >> anotherCourse;
+            std::cout << "\n\n";
+
+        } else if(choice == 2){
+            std::cout << "\n\nClosing program...\n";
+            exit(0);
+        }
+
+        if(anotherCourse == 2){
+            std::cout << "\n\nClosing program...\n";
+            exit(0);
+        }
+
+    } while (anotherCourse == 0);
+
+    std::cout << "\n\n";
 }
 
+void deleteCourse(){
+    std::cout << "---Delete courses------------\n";
+}
 
 /*
-    Based on
-        https://www.daniweb.com/programming/software-development/code/216996/delete-a-line-from-a-text-file
+
+9 [OCS15] AP Computer Science A                                            A (100)
+9 [OE010] Honors Textual Analysis and Argumentation                        A (96)
+9 [OM4BC] AP Calculus BC                                                   A (98)
+9 [OMSB9] Methodology of Science - Biology                                 A (100)
+9 [OHSWP] Wellness I
+9 [OE10WL] Textual Analysis and Argumentation Writing Lab
 */
-void deleteCourse()
-{
-    std::ifstream file ("grades.txt");
-    std::ofstream tempFile ("temp.txt", std::ios::app);
-    
-    std::string line,
-                toDelete,
-                courseID;
-    
-    std::cout << "Enter the course ID (5 characters): ";
-    std::cin >> toDelete;
-    while(toDelete.length() != 5)
-    {
-        std::cout << "Course ID must be 5 characters: ";
-        std::cin >> toDelete;
-    }
-    
-    
-    while(getline(file, line))
-    {
-        // Grade is two digits
-        if(isdigit(line[1]))
-            courseID = line.substr(4, 5);
-        
-        // Grade is one digit
-        else
-            courseID = line.substr(3, 5);
-        
-        if(toDelete != courseID)
-            tempFile << line << "\n";
-    }
-    
-    file.close();
-    tempFile.close();
-    
-    remove("grades.txt");
-    rename("temp.txt", "grades.txt");
-    
-    // Avoid weird happenings with overview directly after adding/deleting a course.
-    exit(0);
-}
 
 
-void showOverview()
-{
-    std::string line;
-    int grade = 0,
-        count = 0,
-        word;
-    
-    // For calculating average
-    double sumGrades = 0.0;
-    int numCourses = 0;
-    
-    
-    // File
-    std::ifstream file;
-    
-    
-    for(int i = 7; i <= 12; i++)
-    {
-        // Reset
-        sumGrades = 0.0;
-        numCourses = 0;
-        
-        
-        // Open file
-        file.open("grades.txt", std::ios::in);
-        
-        std::string spaces = "";
-        spaces.assign(67, ' ');
-        
-        std::cout << i << "th grade\n";
-        std::cout << "  Course" << spaces << "Grade\n";
-        
-        
-        // Read file
-        while(getline(file, line))
-        {
-            // The grade level
-            if(line[1] == ' ')
-                grade = ((int)line[0] - 48);
-            else
-                grade = ((int)line[0] - 48) * 10 + ((int)line[1] - 48);
-            
-            
-            if(grade == i)
-            {
-                numCourses++;
+void showOverview(){
+    // Show courses taken for every grade
+    for(int grade = 8; grade <= 12; grade++){
+        std::cout << "---" << (grade < 10 ? " " : "") << grade << "th Grade Courses---------\n";
+
+        double gradeSum = 0.0;
+        int numCourses = 0;
+
+        for(Course course : courseload){
+            if(course.getGradeTaken() == grade){
+                // Margins
+                std::cout << std::fixed << std::setprecision(2) << std::setw(10);
                 
-                // Gets the sum of grades for calculating the average.
-                // Note: line[line.length() - 1] is a whitespace character.
-                
-                if(isspace(line[line.length() - 1]))
-                {
-                    // Three digits
-                    if(isdigit(line[line.length() - 5]))
-                        sumGrades += (int)(line[line.length() - 5] - '0') * 100
-                                   + (int)(line[line.length() - 4] - '0') * 10
-                                   + (int)(line[line.length() - 3] - '0');
-                    
-                    // Two digits
-                    else if(isdigit(line[line.length() - 4]))
-                        sumGrades += (int)(line[line.length() - 4] - '0') * 10
-                                   + (int)(line[line.length() - 3] - '0');
-                    
-                    // One digit
-                    else
-                        sumGrades += (int)(line[line.length() - 3] - ('0'));
+                if(course.getScore() == -1)
+                    std::cout << "N/A" << " ";
+                else {
+                    std::cout << course.getScore() << "%";
+                    gradeSum += course.getScore();
+                    numCourses++;
                 }
                 
-                
-                
-                std::cout << "  ";
-                for(int j = 2; j < line.length(); j++)
-                    std::cout << line[j];
-                    
-                std::cout << "\n";
+                std::cout << " | [" << course.getCourseCode() << "] " << course.getCourseName() << "\n";
             }
-            
+        }
+
+        if(numCourses == 0){
+            std::cout << "[NO DATA]\n";
+        } else {
+            std::cout << "\nAverage: " << gradeSum/numCourses << "%\n";
         }
         
-        
-        // Display average grade
-        if(numCourses > 0)
-            std::cout << "\nAverage grade: " << numberToLetter(sumGrades/numCourses) << " (" << (sumGrades/numCourses) << ")\n";
-        else
-            std::cout << "\nNo data\n";
-        
-        std::cout << "\n\n\n";
-        
-        // Close file
-        file.close();
-        
+        std::cout << "\n";
     }
-    
+
+    // Options
+    int choice;
+    std::cout << "\nEnter 0 to go back to menu and 1 to quit.\n";
+    std::cin >> choice;
+
+    if(choice == 1){
+        std::cout << "\n\nClosing program...\n";
+        exit(0);
+    }
+
+    std::cout << "\n\n";
 }
