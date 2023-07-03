@@ -1,6 +1,10 @@
 #ifndef FUNCS_H
 #define FUNCS_H
 
+#include <string>
+
+void updateCourseload();
+
 std::string numberToLetter(int grade);
 // Converts a number grade to a letter grade
 
