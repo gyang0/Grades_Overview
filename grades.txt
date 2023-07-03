@@ -1,10 +1,40 @@
-8 [OC005] Honors Chemistry                                                 A (93)
-8 [JE002] Fundamentals of Literary Analysis                                A (96)
-8 [OM013] Honors Precalculus                                               A (99)
-8 [OCS10] Programming in C++                                               A (100)
-9 [OCS15] AP Computer Science A                                            A (100)
-9 [OE010] Honors Textual Analysis and Argumentation                        A (96)
-9 [OM4BC] AP Calculus BC                                                   A (98)
-9 [OMSB9] Methodology of Science - Biology                                 A (100)
-9 [OHSWP] Wellness I
-9 [OE10WL] Textual Analysis and Argumentation Writing Lab
+8
+OC005
+Honors Chemistry
+93
+8
+JE002
+Fundamentals of Literary Analysis
+96
+8
+OM013
+Honors Precalculus
+99
+8
+OCS10
+Programming in C++
+100
+9
+OCS15
+AP Computer Science A
+100
+9
+OE010
+Honors Textual Analysis and Argumentation
+96
+9
+OM4BC
+AP Calculus BC
+98
+9
+OMSB9
+Methodology of Science - Biology
+100
+9
+OHSWP
+Wellness I
+-1
+9
+OE10WL
+Textual Analysis and Argumentation Writing Lab
+-1
