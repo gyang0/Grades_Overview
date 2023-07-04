@@ -12,7 +12,18 @@
 // Courses taken
 std::vector<Course> courseload;
 
-
+/**
+ * Reads from grades.txt and updates the courseload vector with specified courses.
+ * 
+ * There are 4 lines of data associated with a class.
+ * To change, fix LINES_PER_COURSE defined above.
+ * 
+ * Courses are stored in the following form:
+ *  [line 1]: GRADE TAKEN
+ *  [line 2]: COURSE CODE
+ *  [line 3]: COURSE NAME
+ *  [line 4]: SCORE RECEIVED
+ */ 
 void updateCourseload(){
     courseload = {};
 
@@ -23,6 +34,10 @@ void updateCourseload(){
     Course toAdd(0, "00000", "TITLE", 0);
 
     while(getline(file, line)){
+        // Ignore blank lines
+        if(line.length() == 0)
+            continue;
+
         // do something with the lines
         if(index == 0) toAdd.setGradeTaken(std::stoi(line));
         else if(index == 1) toAdd.setCourseCode(line);
@@ -40,6 +55,56 @@ void updateCourseload(){
 
     file.close();
 }
+
+
+/**
+ * Replaces the relevant lines in grades.txt for a specific course with blanks.
+ * The blanks are skipped over by the updateCourseload method when reading.
+ * 
+ * @params fileName - String name of the file
+ * @params courseCode - String course code of the file
+ */ 
+void eraseCourseData(std::string fileName, std::string courseCode){
+    // First, the contents of the old file except for the erased course are stored in a string.
+    std::ifstream readFile("grades.txt");
+    std::string newFile = "";
+
+    std::string dataToAdd[4];
+
+    std::string line;
+    int index = 0;
+    while(getline(readFile, line)){
+        // Ignore blank lines
+        if(line.length() == 0)
+            continue;
+        
+        dataToAdd[index] = line;
+
+        index++;
+
+        // Finished reading the data for a single file
+        if(index >= LINES_PER_COURSE){
+            // Check if it isn't the one to delete.
+            if(dataToAdd[1] != courseCode){
+                newFile += dataToAdd[0] + "\n" +
+                           dataToAdd[1] + "\n" +
+                           dataToAdd[2] + "\n" +
+                           dataToAdd[3] + "\n\n";
+            }
+
+            index = 0;
+        }
+    }
+
+    readFile.close();
+
+
+    // Then rewrite the file with the new contents.
+    std::ofstream writeFile("grades.txt");
+    writeFile << newFile;
+    writeFile.close();
+}
+
 
 /**
  * Converts a numeric grade to its letter grade.
@@ -62,6 +127,12 @@ std::string numberToLetter(int grade){
     else return "F";
 }
 
+
+/**
+ * Submenu for adding courses
+ * Takes the data associated with a course and adds it to the file.
+ * The courseload vector is updated as well.
+ */ 
 void addCourse(){
     int anotherCourse = 0;
     do {
@@ -96,7 +167,7 @@ void addCourse(){
             std::cout << "   Course code: " << courseCode << "\n";
             std::cout << "   Course name: " << courseName << "\n";
             std::cout << "   Numeric score received: " << score << "\n\n";
-            std::cout << "Enter 0 to proceed, 1 to edit this information, and 2 to quit: ";
+            std::cout << "Enter 0 to proceed, 1 to edit this information, and 2 to return to menu: ";
 
             std::cin >> choice;
             std::cout << "\n";
@@ -111,22 +182,19 @@ void addCourse(){
             file << gradeTaken << "\n";
             file << courseCode << "\n";
             file << courseName << "\n";
-            file << score << "\n";
+            file << score << "\n\n";
             file.close();
 
+            // Update courseload vector (just in case)
+            updateCourseload();
+
             std::cout << "The course has been added. Would you like to add another course?\n";
-            std::cout << "Enter 0 to add another course, 1 to return to menu, and 2 to quit: ";
+            std::cout << "Enter 0 to add another course and 1 to return to menu: ";
             std::cin >> anotherCourse;
             std::cout << "\n\n";
 
         } else if(choice == 2){
-            std::cout << "\n\nClosing program...\n";
-            exit(0);
-        }
-
-        if(anotherCourse == 2){
-            std::cout << "\n\nClosing program...\n";
-            exit(0);
+            return;
         }
 
     } while (anotherCourse == 0);
@@ -134,21 +202,93 @@ void addCourse(){
     std::cout << "\n\n";
 }
 
+
+/**
+ * Submenu for deleting courses
+ * Takes the course code, checks if it exists, and deletes the course.
+ * 
+ * Both the courseload vector and the file are changed. For the file,
+ * relevant lines are replaced with blank lines, which are skipped over
+ * by the program.
+ */ 
 void deleteCourse(){
     std::cout << "---Delete courses------------\n";
+
+    // Delete more courses
+    int choice = -1;
+    do {
+
+        choice = -1;
+
+        // Edit information
+        int editInfo = -1;
+
+        // Delete more courses
+        int deleteMore = -1;
+
+        do {
+
+            editInfo = -1;
+            deleteMore = -1;
+            
+            std::string courseCode;
+            std::cout << "Enter the course code of the course you wish to delete: ";
+            std::cin >> courseCode;
+
+            std::cout << std::endl;
+
+            // Find cours
+            int courseIndex = -1;
+            for(int i = 0; i < courseload.size(); i++){
+                if(courseload[i].getCourseCode() == courseCode){
+                    courseIndex = i;
+                    break;
+                }
+            }
+
+            
+            if(courseIndex == -1){
+                std::cout << "Error: could not find course associated with that course code.\n";
+                std::cout << "Enter 0 to try again and 1 to return to menu: ";
+                std::cin >> choice;
+            } else {
+                std::cout << "The following course will be deleted:\n";
+                std::cout << "   Grade taken: " << courseload[courseIndex].getGradeTaken() << "\n";
+                std::cout << "   Course code: " << courseload[courseIndex].getCourseCode() << "\n";
+                std::cout << "   Course name: " << courseload[courseIndex].getCourseName() << "\n";
+                std::cout << "   Numeric score received: " << courseload[courseIndex].getScore() << "\n\n";
+                std::cout << "Enter 0 to proceed, 1 to edit this information, and 2 to return to menu: ";
+                std::cin >> editInfo;
+            }
+
+            // Return to menu
+            if(editInfo == 2)
+                return;
+
+            // Delete the course.
+            else if(editInfo == 0){
+
+                // Erase the course data in the file.
+                eraseCourseData("grades.txt", courseCode);
+                updateCourseload();
+
+                std::cout << "\n\nCourse successfully deleted.\n\n";
+                std::cout << "Enter 0 to delete another course and 1 to return to menu: ";
+                std::cin >> deleteMore;
+
+                std::cout << std::endl;
+            }
+
+        } while(editInfo == 1 || deleteMore == 0);
+
+    } while(choice == 0);
 }
 
-/*
 
-9 [OCS15] AP Computer Science A                                            A (100)
-9 [OE010] Honors Textual Analysis and Argumentation                        A (96)
-9 [OM4BC] AP Calculus BC                                                   A (98)
-9 [OMSB9] Methodology of Science - Biology                                 A (100)
-9 [OHSWP] Wellness I
-9 [OE10WL] Textual Analysis and Argumentation Writing Lab
-*/
-
-
+/**
+ * Submenu for showing the overview of courses for different grades
+ * Nothing too fancy, just some tables and average grade reports.
+ */ 
 void showOverview(){
     // Show courses taken for every grade
     for(int grade = 8; grade <= 12; grade++){
