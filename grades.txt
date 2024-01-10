@@ -1,0 +1,53 @@
+8
+JE002
+Fundamentals of Literary Analysis
+96
+-1
+
+8
+OC005
+Honors Chemistry
+93
+-1
+
+8
+OM013
+Honors Precalculus
+99
+-1
+
+8
+OCS10
+Programming in C++
+100
+-1
+
+9
+OCS15
+AP Computer Science A
+100
+-1
+
+9
+OE010
+Honors Textual Analysis and Argumentation
+96
+-1
+
+9
+OM4BC
+AP Calculus BC
+98
+-1
+
+9
+OMSB9
+Methodology of Science - Biology
+100
+-1
+
+9
+OHSWP
+Wellness I
+-1
+-1
