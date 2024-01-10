@@ -1,9 +1,19 @@
+/* TODO
+1. Add semester grades
+2. Add stuff for external institution courses
+3. More compact data storage
+4. Exam scores and such
+
+Less hardcoded values for overview table spacing
+Organize helper functions better (funcs.cpp)
+*/
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <stdlib.h>
-#include "funcs.h"
-#include "course.h"
+#include "funcs.cpp"
+#include "course.cpp"
 using namespace std;
 
 
