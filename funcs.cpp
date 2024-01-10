@@ -3,11 +3,12 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <utility>
 #include "course.h"
 #include "funcs.h"
 
 // How many lines of data there is in grades.txt per course
-#define LINES_PER_COURSE 4
+#define LINES_PER_COURSE 5
 
 // Courses taken
 std::vector<Course> courseload;
@@ -22,7 +23,8 @@ std::vector<Course> courseload;
  *  [line 1]: GRADE TAKEN
  *  [line 2]: COURSE CODE
  *  [line 3]: COURSE NAME
- *  [line 4]: SCORE RECEIVED
+ *  [line 4]: SEMESTER 1 SCORE
+ *  [line 5]: SEMESTER 2 SCORE
  */ 
 void updateCourseload(){
     courseload = {};
@@ -30,19 +32,27 @@ void updateCourseload(){
     std::ifstream file("grades.txt");
     std::string line;
 
-    int index = 0;
-    Course toAdd(0, "00000", "TITLE", 0);
 
+    int gradeTaken;
+    std::string courseCode;
+    std::string courseName;
+    std::pair<double, double> score;
+
+    int index = 0;
     while(getline(file, line)){
         // Ignore blank lines
         if(line.length() == 0)
             continue;
 
         // do something with the lines
-        if(index == 0) toAdd.setGradeTaken(std::stoi(line));
-        else if(index == 1) toAdd.setCourseCode(line);
-        else if(index == 2) toAdd.setCourseName(line);
-        else if(index == 3) toAdd.setScore(std::stoi(line));
+        if(index == 0) gradeTaken = std::stoi(line);
+        else if(index == 1) courseCode = line;
+        else if(index == 2) courseName = line;
+        else if(index == 3) score.first = std::stoi(line);
+        else if(index == 4) score.second = std::stoi(line);
+
+        // New course to add
+        Course toAdd(gradeTaken, courseCode, courseName, score);
 
         // Loop for every 4 lines of the file
         index++;
@@ -256,7 +266,7 @@ void deleteCourse(){
                 std::cout << "   Grade taken: " << courseload[courseIndex].getGradeTaken() << "\n";
                 std::cout << "   Course code: " << courseload[courseIndex].getCourseCode() << "\n";
                 std::cout << "   Course name: " << courseload[courseIndex].getCourseName() << "\n";
-                std::cout << "   Numeric score received: " << courseload[courseIndex].getScore() << "\n\n";
+                std::cout << "   Semester scores: " << courseload[courseIndex].getScore().first << ", " << courseload[courseIndex].getScore().second << "\n\n";
                 std::cout << "Enter 0 to proceed, 1 to edit this information, and 2 to return to menu: ";
                 std::cin >> editInfo;
             }
@@ -285,6 +295,19 @@ void deleteCourse(){
 }
 
 
+
+// Spacings for table
+#define COURSE_ID_SPACE 15
+#define COURSE_NAME_SPACE 43
+#define SEM1_SCORE_SPACE 8
+#define SEM2_SCORE_SPACE 8
+
+std::string centerText(std::string toCenter, int numSpacings){
+    // May be off by 1 char for containers with odd # of characters
+    std::string blanks = std::string((numSpacings - toCenter.size())/2, ' ');
+    return blanks + toCenter + blanks;
+}
+
 /**
  * Submenu for showing the overview of courses for different grades
  * Nothing too fancy, just some tables and average grade reports.
@@ -292,35 +315,57 @@ void deleteCourse(){
 void showOverview(){
     // Show courses taken for every grade
     for(int grade = 8; grade <= 12; grade++){
-        std::cout << "---" << (grade < 10 ? " " : "") << grade << "th Grade Courses---------\n";
+        std::cout << "---" << (grade < 10 ? "- " : " ") << grade << "th Grade Courses ---------\n\n";
+        
+        std::cout << "\t" << centerText("Course ID", COURSE_ID_SPACE) << "|";
+        std::cout << centerText("Course Name", COURSE_NAME_SPACE) << "|";
+        std::cout << centerText("S1", SEM1_SCORE_SPACE) << "|";
+        std::cout << centerText("S2", SEM2_SCORE_SPACE) << "\n";
+
+        std::cout << std::string(COURSE_ID_SPACE + COURSE_NAME_SPACE + SEM1_SCORE_SPACE + SEM2_SCORE_SPACE, '-') << "\n";
 
         double gradeSum = 0.0;
-        int numCourses = 0;
+        int numGrades = 0;
 
         for(Course course : courseload){
             if(course.getGradeTaken() == grade){
                 // Margins
                 std::cout << std::fixed << std::setprecision(2) << std::setw(10);
+
+                std::cout << course.getCourseCode();
+                std::cout << " | ";
+                std::cout << course.getCourseName();
                 
-                if(course.getScore() == -1)
-                    std::cout << "N/A" << " ";
-                else {
-                    std::cout << course.getScore() << "%";
-                    gradeSum += course.getScore();
-                    numCourses++;
+                // Grade not applicable for semester 1
+                if(course.getScore().first == -1){
+                    std::cout << " | " << "N/A";
+                } else {
+                    std::cout << " | " << course.getScore().first;
+                    gradeSum += course.getScore().first;
+                    
+                    numGrades++;
                 }
-                
-                std::cout << " | [" << course.getCourseCode() << "] " << course.getCourseName() << "\n";
+
+                // Grade not applicable for semester 2
+                if(course.getScore().second == -1){
+                    std::cout << " | " << "N/A" << " |\n";
+                } else {
+                    std::cout << " | " << course.getScore().second << " |\n";
+                    gradeSum += course.getScore().second;
+                    
+                    numGrades++;
+                }
+
             }
         }
 
-        if(numCourses == 0){
+        if(numGrades == 0){
             std::cout << "[NO DATA]\n";
         } else {
-            std::cout << "\nAverage: " << gradeSum/numCourses << "%\n";
+            std::cout << "\nAverage: " << gradeSum/numGrades << "%\n";
         }
         
-        std::cout << "\n";
+        std::cout << "\n\n";
     }
 
     // Options
