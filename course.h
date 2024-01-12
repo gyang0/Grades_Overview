@@ -10,23 +10,23 @@ private:
     int gradeTaken;
     std::string courseCode;
     std::string courseName;
-    std::pair<double, double> score; // <semester 1 score, semester 2 score>
+    std::pair<int, int> score; // <semester 1 score, semester 2 score>
     
 public:
     // Constructor
-    Course(int _gradeTaken, std::string _courseCode, std::string _courseName, std::pair<double, double> _score);
+    Course(int _gradeTaken, std::string _courseCode, std::string _courseName, std::pair<int, int> _score);
 
     // Getters
     int getGradeTaken();
     std::string getCourseCode();
     std::string getCourseName();
-    std::pair<double, double> getScore();
+    std::pair<int, int> getScore();
 
     // Setters
     void setGradeTaken(int newVar);
     void setCourseCode(std::string newVar);
     void setCourseName(std::string newVar);
-    void setScore(std::pair<double, double> newVar);
+    void setScore(std::pair<int, int> newVar);
 };
 
 #endif
