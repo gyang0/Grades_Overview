@@ -1,11 +1,10 @@
 /* TODO
-1. Add semester grades
 2. Add stuff for external institution courses
-3. More compact data storage
-4. Exam scores and such
+3. Exam scores and such
+6. Test adding/deleting courses
 
-Less hardcoded values for overview table spacing
 Organize helper functions better (funcs.cpp)
+Comment methods
 */
 
 #include <iostream>
