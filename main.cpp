@@ -1,11 +1,8 @@
 /* TODO
-1. Add semester grades
-2. Add stuff for external institution courses
-3. More compact data storage
-4. Exam scores and such
+6. Test adding/deleting courses
 
-Less hardcoded values for overview table spacing
 Organize helper functions better (funcs.cpp)
+Comment methods (& revise outdated ones)
 */
 
 #include <iostream>
@@ -14,15 +11,15 @@ Organize helper functions better (funcs.cpp)
 #include <stdlib.h>
 #include "funcs.cpp"
 #include "course.cpp"
+#include "exam.cpp"
 using namespace std;
 
 
 int main(){
     // Main loop
     do {
-        // Check for any updates of courses
-        updateCourseload();
-
+        // Check for new data
+        updateData();
 
         int choice = 0;
         

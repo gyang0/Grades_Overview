@@ -1,53 +1,29 @@
-8
-JE002
-Fundamentals of Literary Analysis
-96
--1
+S 8 94 96 JE002 Fundamentals of Literary Analysis
+S 8 95 93 OC005 Honors Chemistry
+S 8 100 99 OM013 Honors Precalculus
+S 8 99 100 OCS10 Programming in C++
+S 9 100 100 OCS15 AP Computer Science A
+S 9 95 97 OE010 Textual Analysis and Argumentation
+S 9 98 98 OM4BC AP Calculus BC
+S 9 100 100 OMSB9 Core: Methodology of Science - Biology
+S 9 -1 -1 OHSWP Wellness I
+S 10 97 98 UM150 Multivariable Calculus
+S 10 96 95 OB010A Unity & Diversity of Biological Systems
+S 10 95 96 OHSC0 Core: History and Philosophy of Science
+S 10 93 97 OE011 Modes of Writing and Argumentation
+S 10 -1 -1 OHSWPA Wellness II
 
-8
-OC005
-Honors Chemistry
-93
--1
+E 8 96 98 FRENI French 1
+E 9 99 99 FRENII French 2
+E 10 92 90 APMUSIC AP Music Theory
 
-8
-OM013
-Honors Precalculus
-99
--1
+Q 9 2023/5/1 4 AP Chemistry
+Q 9 2023/5/3 5 AP Computer Science A
+Q 9 2023/5/8 5 AP Calculus BC
+Q 10 2024/5/6 4 AP Chemistry
+Q 10 2024/5/15 4 AP Music Theory
+Q 10 2024/5/17 5 AP Latin
 
-8
-OCS10
-Programming in C++
-100
--1
-
-9
-OCS15
-AP Computer Science A
-100
--1
-
-9
-OE010
-Honors Textual Analysis and Argumentation
-96
--1
-
-9
-OM4BC
-AP Calculus BC
-98
--1
-
-9
-OMSB9
-Methodology of Science - Biology
-100
--1
-
-9
-OHSWP
-Wellness I
--1
--1
+Q 10 2023/8/26 1540 SAT
+Q 10 2023/9/9 35 ACT
+Q 10 2023/11/4 1580 SAT
